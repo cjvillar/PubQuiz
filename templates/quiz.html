@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    quiz
+{% endblock %}
+{% block main %}
+
+
+<h1>⚡ Lightning Round ⚡</h1>
+<div class="container mt-2">
+    <div class="timer mt-1">
+       <h2>Timer: <span id="countdown"></span></h2>
+       <br>
+    </div>
+    <form method="post" action="/quiz">
+        <div class="mb-3">
+            <strong>Category:</strong> {{ question['category'] }}<br><br>
+            <strong>Question:</strong> {{ question['question'] }}<br><br>
+            {% if question['type'] == 'multiple' %}
+                <select class="form-select mb-8 bg-light" name="question">
+                    {% for answer in question['incorrect_answers'] %}
+                        <option value="{{ answer }}">{{ answer }}</option>
+                    {% endfor %}
+                    <option value="{{ question['correct_answer'] }}">{{ question['correct_answer'] }}</option>
+                </select>
+            {% elif question['type'] == 'boolean' %}
+                <input type="radio" name="question" value="True">True<br>
+                <input type="radio" name="question" value="False">False<br>
+            {% endif %}
+            <br>
+            <input type="submit" class="btn btn-secondary" value="Next Question">
+        </div>
+    </form>
+</div>
+<script>
+    var countdownElement = document.getElementById('countdown');
+    function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        
+        const formattedTime = `${minutes} m  ${remainingSeconds.toFixed(2)} s`;
+        return formattedTime;
+    }
+
+    function updateCountdown() {
+        //fetch the timer value 
+        fetch('/get_timer')
+            .then(response => response.json())
+            .then(data => {
+                countdownElement.textContent = formatTime(data.timer);
+                if (data.timer === 0) {
+                    clearInterval(timerInterval);
+                    alert('Time is up! Quiz is over.');
+                    window.location.href = "{{ url_for('quiz_results') }}";
+                }
+            })
+            .catch(error => {
+                console.error('Failed to fetch timer data:', error);
+            });
+    }
+
+    var timerInterval = setInterval(updateCountdown, 1000);
+</script>
+
+{% endblock %}

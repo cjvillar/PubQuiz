@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Leaderboard
+{% endblock %}
+
+{% block main %}
+<div class="section">
+  <h1>Best Scores 🍸</h1>
+  <table class="table table-bordered table-striped table-light">
+      <thead>
+          <tr>
+              <th>Name</th>
+              <th>Time</th>
+              <th>High Score</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for user in leaderboard_data %}
+            {% if user.high_score != 0 and user.high_score != None %}
+              <tr>
+                  <td>{{ user.username }}</td>
+                  <td>{{ user.user_time }}</td>
+                  <td>{{ user.high_score }}</td>
+              </tr>
+            {% endif %}
+          {% endfor %}
+      </tbody>
+  </table>
+</div>
+{% endblock %}

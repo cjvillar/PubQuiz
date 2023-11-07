@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+{% block main %}
+<div class="card text-center">
+    
+    <div class="card-header">
+       <h1> Hi, {{ username }}  </h1> 
+    </div>
+    <div class="card-body">
+      <img height="200" width="100" src="../static/glass.PNG" alt="Toggle Navigation">
+      <p class="card-text">Ready For Pub Trivia!?<br> This is a timed quiz so be ready!</p>
+      <a href="/quiz" class="btn btn-primary bg-dark">Start</a>
+    </div>
+  </div>
+{% endblock %}

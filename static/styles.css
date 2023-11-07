@@ -1,0 +1,30 @@
+@import url('https://fonts.google.com/specimen/Lato');
+
+body {
+    font-family: 'Lato', sans-serif;
+    --bs-body-line-height: 1.4;
+    --bs-body-bg: #3b3a3a;
+    color: white !important; 
+}
+
+
+h1, h2, h3, h4, h5, h6, p {
+    color: white;
+}
+
+.customnavbar a {
+    background-color: #3b3a3a;
+    color: white;
+}
+
+.customnavbar a:active {
+  color: white;
+}
+
+
+.table {
+    --bs-table-color: var(--bs-gray-600);
+    --bs-table-bg: #3b3a3a;
+    --bs-table-border-color: transparent;
+}
+
