@@ -17,29 +17,61 @@ from sqlalchemy.orm import sessionmaker
 from quiz_data import data
 from models import User, UserStats
 
+#from dotenv import load_dotenv
+import os
+
 # config app
-app = Flask(__name__)
+# app = Flask(__name__)
 
-# correct answers used in quiz
-correctAnswers = 0
+# # correct answers used in quiz
+# correctAnswers = 0
 
-# Configure Flask to use server-side sessions stored in the filesystem
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
-Session(app)
+# # Configure Flask to use server-side sessions stored in the filesystem
+# app.config["SESSION_PERMANENT"] = False
+# app.config["SESSION_TYPE"] = "filesystem"
+# Session(app)
 
-# Configure SQLAlchemy for the database connection
-engine = create_engine("sqlite:///pubQuiz.db")
-Session = sessionmaker(bind=engine)
+# # Configure SQLAlchemy for the database connection
+# engine = create_engine("sqlite:///pubQuiz.db")
+# Session = sessionmaker(bind=engine)
 
 
-@app.after_request
-def after_request(response):
-    """Ensure responses aren't cached"""
-    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    response.headers["Expires"] = 0
-    response.headers["Pragma"] = "no-cache"
-    return response
+def create_app(database_uri="sqlite:///pubQuiz.db"):
+    # Create the Flask app
+    app = Flask(__name__)
+
+    # Set the secret key for the app
+    app.secret_key = os.getenv("SECRET_KEY")
+
+    # Configure Flask to use server-side sessions stored in the filesystem
+    app.config["SESSION_PERMANENT"] = False
+    app.config["SESSION_TYPE"] = "filesystem"
+
+    # Configure SQLAlchemy for the database connection
+    engine = create_engine(database_uri)
+    Session = sessionmaker(bind=engine)
+
+    # Define the after_request function
+    @app.after_request
+    def after_request(response):
+        """Ensure responses aren't cached"""
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        response.headers["Expires"] = 0
+        response.headers["Pragma"] = "no-cache"
+        return response
+
+    return app
+    
+# Get the Flask app instance
+app = create_app()
+
+# @app.after_request
+# def after_request(response):
+#     """Ensure responses aren't cached"""
+#     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+#     response.headers["Expires"] = 0
+#     response.headers["Pragma"] = "no-cache"
+#     return response
 
 
 def calculate_remaining_time():
